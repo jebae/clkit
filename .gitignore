@@ -1,0 +1,10 @@
+*.*.sw*
+*.sw*
+dumbmain.c
+*.out
+*.dSYM
+*.o
+*.a
+*.sh
+kernels
+.vscode
