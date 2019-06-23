@@ -8,3 +8,4 @@ dumbmain.c
 *.sh
 kernels
 .vscode
+.DS_Store

@@ -77,19 +77,23 @@ OBJS += $(addprefix $(OBJDIR)/, $(SRC_RELEASE:.c=.o))
 OBJS += $(addprefix $(OBJDIR)/, $(SRC_UTILS:.c=.o))
 
 # compile objs
-$(OBJDIR)/%.o : $(SRCDIR)/cmd_queue/%.c $(INCDIR)/clkit.h
+HEADERS = $(INCDIR)/clkit.h\
+	$(LIBFT_PATH)/includes/libft.h\
+	$(LIBFT_PATH)/includes/get_next_line.h\
+
+$(OBJDIR)/%.o : $(SRCDIR)/cmd_queue/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/handle_error/%.c $(INCDIR)/clkit.h
+$(OBJDIR)/%.o : $(SRCDIR)/handle_error/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/kernel/%.c $(INCDIR)/clkit.h
+$(OBJDIR)/%.o : $(SRCDIR)/kernel/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/memory/%.c $(INCDIR)/clkit.h
+$(OBJDIR)/%.o : $(SRCDIR)/memory/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/prerequisites/%.c $(INCDIR)/clkit.h
+$(OBJDIR)/%.o : $(SRCDIR)/prerequisites/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/release/%.c $(INCDIR)/clkit.h
+$(OBJDIR)/%.o : $(SRCDIR)/release/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/utils/%.c $(INCDIR)/clkit.h
+$(OBJDIR)/%.o : $(SRCDIR)/utils/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
 
 # build
