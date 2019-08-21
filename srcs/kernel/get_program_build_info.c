@@ -12,23 +12,23 @@
 
 #include "clkit.h"
 
-int			clk_get_program_build_info(cl_program program,\
-	cl_device_id device)
+int			clk_get_program_build_info(
+	cl_program program,
+	cl_device_id device
+)
 {
 	cl_int		ret;
 	size_t		value_size;
 	char		*log;
 
-	ret = clGetProgramBuildInfo(program, device,\
-		CL_PROGRAM_BUILD_LOG, 0, NULL, &value_size);
-	if (clk_check_get_program_build_info(ret) == CLKIT_FAIL)
-		return (CLKIT_FAIL);
-	ret = clGetProgramBuildInfo(program, device,\
+	ret = clGetProgramBuildInfo(program, device,
 		CL_PROGRAM_BUILD_LOG, 0, NULL, &value_size);
 	if (clk_check_get_program_build_info(ret) == CLKIT_FAIL)
 		return (CLKIT_FAIL);
 	log = (char *)ft_memalloc(sizeof(char) * value_size);
-	ret = clGetProgramBuildInfo(program, device,\
+	if (log == NULL)
+		return (CLKIT_FAIL);
+	ret = clGetProgramBuildInfo(program, device,
 		CL_PROGRAM_BUILD_LOG, value_size, log, NULL);
 	if (ft_strlen(log) > 0)
 		clk_print_err(log);
