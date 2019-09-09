@@ -6,7 +6,7 @@
 /*   By: jebae <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/17 14:30:41 by jebae             #+#    #+#             */
-/*   Updated: 2019/06/17 14:30:42 by jebae            ###   ########.fr       */
+/*   Updated: 2019/09/09 18:14:45 by jebae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int			clk_get_program_build_info(
 		return (CLKIT_FAIL);
 	log = (char *)ft_memalloc(sizeof(char) * value_size);
 	if (log == NULL)
-		return (CLKIT_FAIL);
-	ret = clGetProgramBuildInfo(program, device,
+		return (clk_print_memalloc_err("program build info log"));
+	ret = clGetProgramBuildInfo(program, device,\
 		CL_PROGRAM_BUILD_LOG, value_size, log, NULL);
 	if (ft_strlen(log) > 0)
 		clk_print_err(log);
