@@ -6,19 +6,21 @@
 /*   By: jebae <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/17 14:31:58 by jebae             #+#    #+#             */
-/*   Updated: 2019/06/17 14:31:58 by jebae            ###   ########.fr       */
+/*   Updated: 2019/09/09 17:35:23 by jebae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "clkit.h"
 
-static int		allocate_cmd_queues(cl_command_queue **cmd_queues,\
-	cl_uint num_devices)
+static int		allocate_cmd_queues(
+	cl_command_queue **cmd_queues,
+	cl_uint num_devices
+)
 {
-	*cmd_queues = (cl_command_queue *)ft_memalloc(\
+	*cmd_queues = (cl_command_queue *)ft_memalloc(
 		sizeof(cl_command_queue) * num_devices);
 	if (*cmd_queues == NULL)
-		return (clk_print_err("Allocating memory to cmd_queues failed\n"));
+		return (clk_print_memalloc_err("command queues"));
 	return (CLKIT_SUCCESS);
 }
 

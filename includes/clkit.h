@@ -6,7 +6,7 @@
 /*   By: jebae <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 16:59:45 by jebae             #+#    #+#             */
-/*   Updated: 2019/08/01 16:59:47 by jebae            ###   ########.fr       */
+/*   Updated: 2019/09/09 17:32:36 by jebae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ typedef struct			s_clkit
 	cl_context			context;
 	cl_command_queue	*cmd_queues;
 	cl_mem				*mems;
+	cl_uint				num_mems;
 	cl_program			program;
 	cl_kernel			*kernels;
+	cl_uint				num_kernels;
 }						t_clkit;
 
 typedef struct			s_create_buffer_args
@@ -62,6 +64,7 @@ typedef struct			s_enqueue_buffer_args
 ** handle_error
 */
 int						clk_print_err(const char *msg);
+int						clk_print_memalloc_err(const char *target);
 int						clk_check_get_platform_ids(cl_int ret);
 int						clk_check_get_device_ids(cl_int ret);
 int						clk_check_get_device_info(cl_int ret);
@@ -87,6 +90,11 @@ int						clk_check_release_context(cl_int ret);
 /*
 ** prerequisites
 */
+void					clk_init_clkit(
+	t_clkit *clkit,
+	cl_uint num_mems,
+	cl_uint num_kernels
+);
 int						clk_set_device(t_clkit *clkit,\
 	cl_device_type type);
 int						clk_create_context(t_clkit *clkit);
@@ -127,9 +135,7 @@ int						clk_finish(cl_command_queue cmd_queue);
 /*
 ** release
 */
-void					clk_release_all(t_clkit *clkit,\
-	cl_uint num_kernels, cl_uint num_mems);
-void					clk_free_all(t_clkit *clkit);
+void					clk_release_all(t_clkit *clkit);
 
 /*
 ** utils

@@ -6,7 +6,7 @@
 /*   By: jebae <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/17 14:31:46 by jebae             #+#    #+#             */
-/*   Updated: 2019/06/17 14:31:47 by jebae            ###   ########.fr       */
+/*   Updated: 2019/09/09 17:35:33 by jebae            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int		allocate_devices(cl_device_id **devices,\
 	*devices = (cl_device_id *)ft_memalloc(\
 		sizeof(cl_device_id) * num_devices);
 	if (*devices == NULL)
-		return (clk_print_err("Allocating memory to devices failed\n"));
+		return (clk_print_memalloc_err("devices"));
 	return (CLKIT_SUCCESS);
 }
 

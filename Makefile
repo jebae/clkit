@@ -55,15 +55,15 @@ SRC_KERNEL = create_kernel.c\
 	create_program.c\
 	build_program.c\
 	get_program_build_info.c\
+	concat_kernel_src.c\
 
 SRC_MEMORY = create_buffer.c\
 
 SRC_PREREQUISITES = set_device.c\
 	create_context.c\
 	create_cmd_queue.c\
-
-SRC_UTILS = get_device_info.c\
-	concat_kernel_src.c\
+	get_device_info.c\
+	init_clkit.c\
 
 SRC_RELEASE = release_all.c\
 
@@ -74,7 +74,6 @@ OBJS += $(addprefix $(OBJDIR)/, $(SRC_KERNEL:.c=.o))
 OBJS += $(addprefix $(OBJDIR)/, $(SRC_MEMORY:.c=.o))
 OBJS += $(addprefix $(OBJDIR)/, $(SRC_PREREQUISITES:.c=.o))
 OBJS += $(addprefix $(OBJDIR)/, $(SRC_RELEASE:.c=.o))
-OBJS += $(addprefix $(OBJDIR)/, $(SRC_UTILS:.c=.o))
 
 # compile objs
 HEADERS = $(INCDIR)/clkit.h\
@@ -92,8 +91,6 @@ $(OBJDIR)/%.o : $(SRCDIR)/memory/%.c $(HEADERS)
 $(OBJDIR)/%.o : $(SRCDIR)/prerequisites/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
 $(OBJDIR)/%.o : $(SRCDIR)/release/%.c $(HEADERS)
-	@$(call compile_obj,$<,$@)
-$(OBJDIR)/%.o : $(SRCDIR)/utils/%.c $(HEADERS)
 	@$(call compile_obj,$<,$@)
 
 # build
