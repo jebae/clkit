@@ -12,12 +12,23 @@
 
 #include "clkit.h"
 
-int			clk_create_program(cl_program *program, cl_context context,\
-	char *src)
+int			clk_create_program(
+	t_clk_program *program,
+	t_clk_context *context,
+	char *src
+)
 {
 	cl_int		ret;
 
-	*program = clCreateProgramWithSource(context, 1,\
-		(const char **)&src, NULL, &ret);
-	return (clk_check_create_program(ret));
+	program->obj = clCreateProgramWithSource(
+		context->obj,
+		1,
+		(const char **)&src,
+		NULL,
+		&ret
+	);
+	if (clk_check_create_program(ret) == CLKIT_FAIL)
+		return (CLKIT_FAIL);
+	program->created = CLKIT_TRUE;
+	return (CLKIT_SUCCESS);
 }

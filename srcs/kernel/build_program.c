@@ -12,13 +12,16 @@
 
 #include "clkit.h"
 
-int			clk_build_program(cl_program program, cl_device_id *device)
+int			clk_build_program(
+	t_clk_program *program,
+	cl_device_id *device
+)
 {
 	cl_int		ret;
 
-	ret = clBuildProgram(program, 1, device, NULL, NULL, NULL);
+	ret = clBuildProgram(program->obj, 1, device, NULL, NULL, NULL);
 	if (clk_check_build_program(ret) == CLKIT_SUCCESS)
 		return (CLKIT_SUCCESS);
-	clk_get_program_build_info(program, *device);
+	clk_get_program_build_info(program->obj, *device);
 	return (CLKIT_FAIL);
 }

@@ -12,10 +12,10 @@
 
 #include "clkit.h"
 
-int			clk_finish(cl_command_queue cmd_queue)
+int			clk_finish(t_clk_cmd_queue *cmd_queue)
 {
 	cl_int		ret;
 
-	ret = clFinish(cmd_queue);
+	ret = clFinish(cmd_queue->obj);
 	return (clk_check_finish(ret));
 }

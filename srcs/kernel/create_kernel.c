@@ -12,14 +12,34 @@
 
 #include "clkit.h"
 
-int			clk_create_kernel(
-	cl_kernel *kernel,
-	cl_program program,
+t_clk_kernel	*clk_new_kernels(cl_uint num_kernels)
+{
+	t_clk_kernel	*kernels;
+	cl_uint			i;
+
+	kernels = ft_memalloc(sizeof(t_clk_kernel) * num_kernels);
+	if (kernels == NULL)
+	{
+		clk_print_memalloc_err("kernels");
+		return (NULL);
+	}
+	i = 0;
+	while (i < num_kernels)
+		kernels[i++].created = CLKIT_FALSE;
+	return (kernels);
+}
+
+int				clk_create_kernel(
+	t_clk_kernel *kernel,
+	t_clk_program *program,
 	const char *kernel_name
 )
 {
 	cl_int		ret;
 
-	*kernel = clCreateKernel(program, kernel_name, &ret);
-	return (clk_check_create_kernel(ret));
+	kernel->obj = clCreateKernel(program->obj, kernel_name, &ret);
+	if (clk_check_create_kernel(ret) == CLKIT_FAIL)
+		return (CLKIT_FAIL);
+	kernel->created = CLKIT_TRUE;
+	return (CLKIT_SUCCESS);
 }

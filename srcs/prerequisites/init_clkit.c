@@ -12,4 +12,6 @@ void		clk_init_clkit(
 	clkit->cmd_queues = NULL;
 	clkit->mems = NULL;
 	clkit->kernels = NULL;
+	clkit->context.created = CLKIT_FALSE;
+	clkit->program.created = CLKIT_FALSE;
 }

@@ -12,11 +12,15 @@
 
 #include "clkit.h"
 
-int			clk_set_kernel_arg(cl_kernel kernel,\
-	cl_uint arg_index, size_t arg_size, const void *arg_value)
+int			clk_set_kernel_arg(
+	t_clk_kernel *kernel,
+	cl_uint arg_index,
+	size_t arg_size,
+	const void *arg_value
+)
 {
 	cl_int		ret;
 
-	ret = clSetKernelArg(kernel, arg_index, arg_size, arg_value);
+	ret = clSetKernelArg(kernel->obj, arg_index, arg_size, arg_value);
 	return (clk_check_set_kernel_arg(ret));
 }

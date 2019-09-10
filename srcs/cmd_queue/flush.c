@@ -12,10 +12,10 @@
 
 #include "clkit.h"
 
-int			clk_flush(cl_command_queue cmd_queue)
+int			clk_flush(t_clk_cmd_queue *cmd_queue)
 {
 	cl_int		ret;
 
-	ret = clFlush(cmd_queue);
+	ret = clFlush(cmd_queue->obj);
 	return (clk_check_flush(ret));
 }

@@ -1,37 +1,56 @@
 #include "clkit.h"
 
-static void		release_kernels(cl_kernel *kernels, cl_uint num_kernels)
+static void		release_kernels(
+	t_clk_kernel *kernels,
+	cl_uint num_kernels
+)
 {
 	cl_uint		i;
 
 	i = 0;
 	while (i < num_kernels)
-		clReleaseKernel(kernels[i++]);
+	{
+		kernels[i].created && clReleaseKernel(kernels[i].obj);
+		i++;
+	}
 }
 
-static void		release_mems(cl_mem *mems, cl_uint num_mems)
+static void		release_mems(
+	t_clk_mem *mems,
+	cl_uint num_mems
+)
 {
 	cl_uint		i;
 
 	i = 0;
 	while (i < num_mems)
-		clReleaseMemObject(mems[i++]);
+	{
+		mems[i].created && clReleaseMemObject(mems[i].obj);
+		i++;
+	}
 }
 
-static void		release_cmd_queues(cl_command_queue *cmd_queues,\
-	cl_uint num_devices)
+static void		release_cmd_queues(
+	t_clk_cmd_queue *cmd_queues,
+	cl_uint num_devices
+)
 {
 	cl_uint		i;
 
 	i = 0;
 	while (i < num_devices)
-		clReleaseCommandQueue(cmd_queues[i++]);
+	{
+		cmd_queues[i].created && clReleaseCommandQueue(cmd_queues[i].obj);
+		i++;
+	}
 }
 
 void			clk_release_all(t_clkit *clkit)
 {
-	clReleaseProgram(clkit->program);
-	clReleaseContext(clkit->context);
+	if (clkit->program.created)
+		clReleaseProgram(clkit->program.obj);
+	if (clkit->context.created)
+		clReleaseContext(clkit->context.obj);
 	if (clkit->devices != NULL)
 		ft_memdel((void **)(&clkit->devices));
 	if (clkit->cmd_queues != NULL)

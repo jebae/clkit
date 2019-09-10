@@ -16,7 +16,16 @@ int			clk_create_context(t_clkit *clkit)
 {
 	cl_int		ret;
 
-	clkit->context = clCreateContext(NULL, clkit->num_devices,
-		clkit->devices, NULL, NULL, &ret);
-	return (clk_check_create_context(ret));
+	clkit->context.obj = clCreateContext(
+		NULL,
+		clkit->num_devices,
+		clkit->devices,
+		NULL,
+		NULL,
+		&ret
+	);
+	if (clk_check_create_context(ret) == CLKIT_FAIL)
+		return (CLKIT_FAIL);
+	clkit->context.created = CLKIT_TRUE;
+	return (CLKIT_SUCCESS);
 }

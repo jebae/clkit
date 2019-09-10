@@ -16,8 +16,14 @@ int			clk_enqueue_write_buffer(t_enqueue_buffer_args *args)
 {
 	cl_int		ret;
 
-	ret = clEnqueueWriteBuffer(args->cmd_queue, args->mem,\
-		CL_TRUE, args->offset, args->size, args->host_buf,\
-		0, NULL, NULL);
+	ret = clEnqueueWriteBuffer(
+		args->cmd_queue->obj,
+		args->mem->obj,
+		CL_TRUE,
+		args->offset,
+		args->size,
+		args->host_buf,
+		0, NULL, NULL
+	);
 	return (clk_check_enqueue_write_buffer(ret));
 }

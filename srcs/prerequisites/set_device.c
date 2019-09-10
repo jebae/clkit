@@ -12,10 +12,12 @@
 
 #include "clkit.h"
 
-static int		allocate_devices(cl_device_id **devices,\
-	cl_uint num_devices)
+static int		allocate_devices(
+	cl_device_id **devices,
+	cl_uint num_devices
+)
 {
-	*devices = (cl_device_id *)ft_memalloc(\
+	*devices = (cl_device_id *)ft_memalloc(
 		sizeof(cl_device_id) * num_devices);
 	if (*devices == NULL)
 		return (clk_print_memalloc_err("devices"));
@@ -27,10 +29,10 @@ static int		set_gpu(t_clkit *clkit)
 	cl_int		ret;
 
 	clkit->num_devices = 1;
-	if (allocate_devices(&(clkit->devices),\
+	if (allocate_devices(&(clkit->devices),
 		clkit->num_devices) == CLKIT_FAIL)
 		return (CLKIT_FAIL);
-	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_GPU,\
+	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_GPU,
 		clkit->num_devices, clkit->devices, NULL);
 	return (clk_check_get_device_ids(ret));
 }
@@ -40,10 +42,10 @@ static int		set_cpu(t_clkit *clkit)
 	cl_int		ret;
 
 	clkit->num_devices = 1;
-	if (allocate_devices(&(clkit->devices),\
+	if (allocate_devices(&(clkit->devices),
 		clkit->num_devices) == CLKIT_FAIL)
 		return (CLKIT_FAIL);
-	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_CPU,\
+	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_CPU,
 		clkit->num_devices, clkit->devices, NULL);
 	return (clk_check_get_device_ids(ret));
 }
@@ -52,14 +54,14 @@ static int		set_all(t_clkit *clkit)
 {
 	cl_int		ret;
 
-	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_ALL,\
+	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_ALL,
 		0, NULL, &(clkit->num_devices));
 	if (clk_check_get_device_ids(ret) == CLKIT_FAIL)
 		return (CLKIT_FAIL);
-	if (allocate_devices(&(clkit->devices),\
+	if (allocate_devices(&(clkit->devices),
 		clkit->num_devices) == CLKIT_FAIL)
 		return (CLKIT_FAIL);
-	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_ALL,\
+	ret = clGetDeviceIDs(clkit->platform, CL_DEVICE_TYPE_ALL,
 		clkit->num_devices, clkit->devices, NULL);
 	return (clk_check_get_device_ids(ret));
 }
@@ -77,5 +79,5 @@ int				clk_set_device(t_clkit *clkit, cl_device_type type)
 		return (set_gpu(clkit));
 	else if (type == CL_DEVICE_TYPE_CPU)
 		return (set_cpu(clkit));
-	return (clk_print_err("Wrong device type\n"));
+	return (clk_print_err("CLKIT : set_device : wrong device type\n"));
 }

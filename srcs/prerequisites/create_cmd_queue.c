@@ -12,33 +12,46 @@
 
 #include "clkit.h"
 
-static int		allocate_cmd_queues(
-	cl_command_queue **cmd_queues,
+static t_clk_cmd_queue		*allocate_cmd_queues(
 	cl_uint num_devices
 )
 {
-	*cmd_queues = (cl_command_queue *)ft_memalloc(
-		sizeof(cl_command_queue) * num_devices);
-	if (*cmd_queues == NULL)
-		return (clk_print_memalloc_err("command queues"));
-	return (CLKIT_SUCCESS);
+	t_clk_cmd_queue		*cmd_queues;
+	cl_uint				i;
+
+	cmd_queues = (t_clk_cmd_queue *)ft_memalloc(
+		sizeof(t_clk_cmd_queue) * num_devices);
+	if (cmd_queues == NULL)
+	{
+		clk_print_memalloc_err("command queues");
+		return (NULL);
+	}
+	i = 0;
+	while (i < num_devices)
+		cmd_queues[i++].created = CLKIT_FALSE;
+	return (cmd_queues);
 }
 
-int				clk_create_cmd_queues(t_clkit *clkit)
+int							clk_create_cmd_queues(t_clkit *clkit)
 {
 	cl_uint		i;
 	cl_int		ret;
 
-	if (allocate_cmd_queues(&(clkit->cmd_queues),\
-		clkit->num_devices) == CLKIT_FAIL)
+	clkit->cmd_queues = allocate_cmd_queues(clkit->num_devices);
+	if (clkit->cmd_queues == NULL)
 		return (CLKIT_FAIL);
 	i = 0;
 	while (i < clkit->num_devices)
 	{
-		clkit->cmd_queues[i] = clCreateCommandQueue(\
-			clkit->context, clkit->devices[i], 0, &ret);
+		clkit->cmd_queues[i].obj = clCreateCommandQueue(
+			clkit->context.obj,
+			clkit->devices[i],
+			0,
+			&ret
+		);
 		if (clk_check_create_cmd_queue(ret) == CLKIT_FAIL)
 			return (CLKIT_FAIL);
+		clkit->cmd_queues[i].created = CLKIT_TRUE;
 		i++;
 	}
 	return (CLKIT_SUCCESS);
