@@ -12,7 +12,7 @@ There are some constraints in clkit.
 
 ## How to use
 
-### requirements
+### Requirements
 
 This library is using [libft](https://github.com/jebae/libft) as alternative of standard lib functions. So at first download or git clone [libft](https://github.com/jebae/libft) and put it in same path with clkit
 
@@ -52,17 +52,13 @@ typedef struct			s_clkit
 
 <br><br>
 
-### prerequisites
+### Prerequisites
 
 <br>
 
 **1. Initialize clkit struct**
 ```c
-void clk_init_clkit(
-  t_clkit *clkit,
-  cl_uint num_mems,
-  cl_uint num_kernels
-);
+void clk_init_clkit(t_clkit *clkit, cl_uint num_mems, cl_uint num_kernels);
 
 // example
 t_clkit clkit;
@@ -77,10 +73,7 @@ clk_init_clkit(&clkit, 2, 1);
 **2. Set plaform and device**
 
 ```c
-int clk_set_device(
-  t_clkit *clkit,
-  cl_device_type type
-);
+int clk_set_device(t_clkit *clkit, cl_device_type type);
 
 // example
 t_clkit clkit;
@@ -118,4 +111,128 @@ int clk_create_cmd_queues(t_clkit *clkit);
 
 It returns `CLKIT_FAIL` if there is error from memory allocating or OpenCL API, else `CLKIT_SUCCESS`.
 
-**updating**
+<br><br>
+
+**4. Create and build program**
+
+```c
+int clk_create_program(t_clk_program *program, t_clk_context *context, char *src);
+
+// example
+char *kernel_src = "\
+  __kernel void get_unit_idx(__global int *out)\
+  {\
+    int idx = get_global_id(0);\
+    out[idx] = idx;\
+  }";
+t_clkit clkit;
+
+clk_create_program(&clkit.program, &clkit.context, kernel_src);
+```
+`clk_create_program` receives program, context pointer and kernel source. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br>
+
+clkit prepared function `clk_concat_kernel_src` to concatenate kernel sources from multiple files.
+
+```c
+char *clk_concat_kernel_src(char **src_files, size_t num_files);
+```
+If lack of memory, it returns `NULL`. Returned value `char *` from `clk_concat_kernel_src` has to be deallocated by developer manually. 
+
+<br>
+
+```c
+int clk_build_program(t_clk_program *program, cl_device_id *device);
+```
+`clk_build_program` build program created by `clk_create_program` on device received as parameter. If there is error during building (e.g. kernel source syntax error) log will be printed. It returns `CLKIT_FAIL` if there is error from memory allocating or OpenCL API, else `CLKIT_SUCCESS`.
+
+<br><br>
+
+**5. Kernels**
+
+```c
+t_clk_kernel *clk_new_kernels(cl_uint num_kernels);
+```
+
+`clk_new_kernels` allocate memories for kernels and return memory address. If lack of memory, it returns `NULL`.
+
+<br>
+
+```c
+int clk_create_kernel(t_clk_kernel *kernel, t_clk_program *program, const char *kernel_name);
+```
+
+`clk_create_kernel` create kernel object of OpenCL API with `kernel_name` received as parameter. Kernel with name `kernel_name` has to exist in your kernel sources. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br><br>
+
+### Memory
+
+```c
+t_clk_mem *clk_new_mems(cl_uint num_mems);
+```
+
+`clk_new_mems` allocate memories for memory objects and return memory address. If lack of memory, it returns `NULL`.
+
+<br>
+
+```c
+int clk_create_buffer(t_clk_mem *mem, t_create_buffer_args *args);
+
+// example
+t_clkit			clkit;
+size_t			size = sizeof(char) * 128;
+char			*buffer = ft_memalloc(size);
+t_create_buffer_args	args;
+
+args.context = &clkit.context;
+args.flags = CL_MEM_WRITE_ONLY;
+args.size = size;
+args.host_ptr = buffer;
+
+clkit.mems = clk_new_mems(1);
+if (clkit.mems != NULL)
+  clk_create_buffer(&clkit.mems[0], &args);
+```
+
+`clk_create_buffer` create memory object of OpenCL API. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br><br>
+
+### Set kernel argument
+
+```c
+int clk_set_kernel_arg(
+  t_clk_kernel *kernel,
+  cl_uint arg_index,
+  size_t arg_size,
+  const void *arg_value
+);
+
+// example
+/* kernel
+__kernel void set_x(__global int *out, int x)
+{
+  int idx = get_global_id(0);
+
+  out[idx] = x;
+}
+*/
+int	x;
+t_clkit	clkit;
+
+x = 1;
+clk_set_kernel_arg(&clkit.kernels[0], 0, sizeof(cl_mem), &clkit.mems[0].obj);
+clk_set_kernel_arg(&clkit.kernels[0], 1, sizeof(int), x);
+```
+
+`clk_set_kernel_arg` receives arguments to be used in kernel. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br><br>
+
+### 
+
+
+
+about get_device_info
