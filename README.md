@@ -1,5 +1,9 @@
 # clkit
 
+:warning: **Using GPU only possible with macOS <= 10.13**
+
+<br>
+
 **clkit** makes parallel programming with OpenCL more easier, including error handling from OpenCL API.
 
 There are some constraints in clkit.
@@ -88,6 +92,25 @@ Parameter `type` can be specific like `CL_DEVICE_TYPE_GPU` or `CL_DEVICE_TYPE_CP
 If `type` is `CL_DEVICE_TYPE_ALL`, `clkit.num_devices` is set with number related with [clGetDeviceIDs](https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clGetDeviceIDs.html). For example, if platform has 1 cpu and 1 gpu `clkit.num_devices` is set 2 and memory with `sizeof(cl_device_id) * 2` is allocated to `clkit.devices`.
 
 It returns `CLKIT_FAIL` if there is error from memory allocating or OpenCL API, else `CLKIT_SUCCESS`.
+
+<br>
+
+```c
+int clk_get_device_info(t_clkit *clkit);
+```
+
+`clk_get_device_info` shows device info like below. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+```
+# output from clk_get_device_info
+Device 0
+Name Intel(R) Core(TM) i5-3470S CPU @ 2.90GHz
+Device Version OpenCL 1.2
+Driver Version 1.1
+OpenCL C Version OpenCL C 1.2
+Compute Units 4
+Max Work Group Size 1024
+```
 
 <br><br>
 
@@ -227,12 +250,74 @@ clk_set_kernel_arg(&clkit.kernels[0], 0, sizeof(cl_mem), &clkit.mems[0].obj);
 clk_set_kernel_arg(&clkit.kernels[0], 1, sizeof(int), x);
 ```
 
-`clk_set_kernel_arg` receives arguments to be used in kernel. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+`clk_set_kernel_arg` receives arguments which gonna be used in kernel. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
 
 <br><br>
 
-### 
+### Executing command in queue
 
+```c
+int clk_enqueue_ndrange_kernel(t_enqueue_ndrange_kernel_args *args);
 
+// example
+t_clkit                         clkit;
+t_enqueue_ndrange_kernel_args   args;
 
-about get_device_info
+args.cmd_queue = clkit.cmd_queues[0];
+args.kernel = clkit.kernels[0];
+args.work_dim = /* work dimension for clEnqueueNDRangeKernel */;
+args.global_work_size = /* global work size for clEnqueueNDRangeKernel */;
+args.local_work_size = /* local work size for clEnqueueNDRangeKernel */;
+
+clk_enqueue_ndrange_kernel(&args);
+
+```
+
+`clk_enqueue_ndrange_kernel` simply pass arguments to `clEnqueueNDRangeKernel` function. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br>
+
+```c
+int clk_enqueue_read_buffer(t_enqueue_buffer_args *args);
+
+// example
+t_clkit                   clkit;
+t_enqueue_buffer_args     args;
+int                       *host_buf;
+
+args.cmd_queue = clkit.cmd_queues[0];
+args.mem = clkit.mems[0];
+args.offset = 0;
+args.size = /* size for clEnqueueReadBuffer */;
+args.host_buf = host_buf;
+```
+
+`clk_enqueue_read_buffer` simply pass arguments to `clEnqueueReadBuffer` function. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br>
+
+```c
+int clk_enqueue_write_buffer(t_enqueue_buffer_args *args);
+```
+`clk_enqueue_write_buffer` simply pass arguments to `clEnqueueWriteBuffer` function. It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br>
+
+```c
+int clk_flush(t_clk_cmd_queue *cmd_queue);
+int clk_finish(t_clk_cmd_queue *cmd_queue);
+```
+
+`clk_flush` call `clFlush` with given `cmd_queue` parameter.
+`clk_finish` call `clFinish` with given `cmd_queue` parameter.
+It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
+
+<br><br>
+
+### Release memories
+
+```c
+void clk_release_all(t_clkit *clkit);
+```
+
+`clk_release_all` release program, context, kernel, command queues, memory object of OpenCL API and free allocated memory in `clkit`.
