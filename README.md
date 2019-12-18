@@ -1,6 +1,6 @@
 # clkit
 
-:warning: **Using GPU only possible with macOS <= 10.13**
+:warning: **Using GPU not working with macOS >= 10.14**
 
 <br>
 
