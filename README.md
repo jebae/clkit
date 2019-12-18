@@ -14,9 +14,7 @@ There are some constraints in clkit.
 
 <br><br>
 
-## How to use
-
-### Requirements
+## Requirements
 
 This library is using [libft](https://github.com/jebae/libft) as alternative of standard lib functions. So at first download or git clone [libft](https://github.com/jebae/libft) and put it in same path with clkit
 
@@ -34,7 +32,15 @@ instead of put libft in same path with clkit, you can modify [Makefile](Makefile
 
 <br><br>
 
-### clkit struct
+## Installation
+
+```c
+make
+```
+
+<br><br>
+
+## clkit struct
 
 ```c
 typedef struct			s_clkit
@@ -56,7 +62,7 @@ typedef struct			s_clkit
 
 <br><br>
 
-### Prerequisites
+## Prerequisites
 
 <br>
 
@@ -190,7 +196,7 @@ int clk_create_kernel(t_clk_kernel *kernel, t_clk_program *program, const char *
 
 <br><br>
 
-### Memory
+## Memory
 
 ```c
 t_clk_mem *clk_new_mems(cl_uint num_mems);
@@ -223,7 +229,7 @@ if (clkit.mems != NULL)
 
 <br><br>
 
-### Set kernel argument
+## Set kernel argument
 
 ```c
 int clk_set_kernel_arg(
@@ -254,7 +260,7 @@ clk_set_kernel_arg(&clkit.kernels[0], 1, sizeof(int), x);
 
 <br><br>
 
-### Executing command in queue
+## Executing command in queue
 
 ```c
 int clk_enqueue_ndrange_kernel(t_enqueue_ndrange_kernel_args *args);
@@ -314,7 +320,7 @@ It returns `CLKIT_FAIL` if there is error from OpenCL API, else `CLKIT_SUCCESS`.
 
 <br><br>
 
-### Release memories
+## Release memories
 
 ```c
 void clk_release_all(t_clkit *clkit);

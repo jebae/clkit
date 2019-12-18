@@ -27,7 +27,7 @@ INCDIR = includes
 LIBFT_PATH = ../libft
 
 # compiler options
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS =
 
 INCLUDES = -I ./$(INCDIR)\
 	-I $(LIBFT_PATH)/includes\
