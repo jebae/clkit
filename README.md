@@ -1,5 +1,7 @@
 # clkit
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ad8ad3c010a4613a3eddf8d43d2f559)](https://www.codacy.com/manual/jebae/clkit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jebae/clkit&amp;utm_campaign=Badge_Grade)
+
 :warning: **Using GPU not working with macOS >= 10.14**
 
 <br>
